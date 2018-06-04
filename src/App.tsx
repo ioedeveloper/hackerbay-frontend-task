@@ -10,11 +10,11 @@ public canvasRef:any;
 public readonly WIDTH = 640;
 public readonly HEIGHT = 425;
 
-public readonly tileW = 20;
-public readonly tileH = 20;
+public readonly tileW = 40;
+public readonly tileH = 40;
 
-public tileRowCount = 25;
-public tileColumnCount = 40;
+public tileRowCount = 20;
+public tileColumnCount = 20;
 
 // tslint:disable-next-line:variable-name
 private _tile:any = [];
@@ -55,7 +55,7 @@ private _ctx:any;
 
   public draw(){
     this.clear();
-    this._ctx.fillStyle = "#FF0000";
+    this._ctx.fillStyle = "#FFFFFF";
     for(let c=0; c<this.tileColumnCount; c++){
       for(let r=0; r<this.tileRowCount; r++){
         this.rect(this._tile[c][r].x, this._tile[c][r].y, this.tileW, this.tileH);
