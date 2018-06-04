@@ -27,6 +27,7 @@ private _ctx:any;
   constructor(props:any){
     super(props);
     this.canvasRef = React.createRef();
+    this.handleKeyPress = this.handleKeyPress.bind(this)
   }
 
   public componentDidMount() {
@@ -38,7 +39,7 @@ private _ctx:any;
 
   public render() {
     return (
-      <div className="App">
+      <div className="App" tabIndex={0} onKeyDown={this.handleKeyPress}>
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Maze Game</h1>
@@ -58,7 +59,7 @@ private _ctx:any;
     this._ctx.fillStyle = "#FFFFFF";
     for(let c=0; c<this.tileColumnCount; c++){
       for(let r=0; r<this.tileRowCount; r++){
-        this.rect(this._tile[c][r].x, this._tile[c][r].y, this.tileW, this.tileH);
+        this.rect(this._tile[c][r].x, this._tile[c][r].y, this.tileW, this.tileH, this._tile[c][r].state);
       }
     }
   }
@@ -67,7 +68,14 @@ private _ctx:any;
     this._ctx.clearRect(0,0,this.WIDTH,this.HEIGHT);
   }
 
-  public rect(x:number,y:number,w:number,h:number){
+  public rect(x:number,y:number,w:number,h:number,state:string){
+    if(state ==='s'){
+      this._ctx.fillStyle = "#00FF00";
+    }else if(state === 'f'){
+      this._ctx.fillStyle = "#FF0000";
+    }else{
+      this._ctx.fillStyle = "#FFFFFF";
+    }
     this._ctx.beginPath();
     this._ctx.rect(x,y,w,h);
     this._ctx.closePath();
@@ -88,6 +96,12 @@ private _ctx:any;
     }
     this._tile[0][0].state = "s";
     this._tile[this.tileColumnCount-1][this.tileRowCount-1] = "f";
+  }
+
+  public handleKeyPress(e:any){
+    e.preventDefault();
+      // tslint:disable-next-line:no-console
+      console.log('This is enter!');
   }
 }
 
