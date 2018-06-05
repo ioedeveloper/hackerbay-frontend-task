@@ -7,11 +7,11 @@ class App extends React.Component {
 
 public canvasRef:any;
 
-public readonly WIDTH = 640;
-public readonly HEIGHT = 425;
+public readonly WIDTH = 1366;
+public readonly HEIGHT = 637;
 
-public readonly tileW = 40;
-public readonly tileH = 40;
+public readonly tileW = 10;
+public readonly tileH = 10;
 
 public tileRowCount = 20;
 public tileColumnCount = 20;
@@ -40,15 +40,15 @@ private _ctx:any;
   public render() {
     return (
       <div className="App" tabIndex={0} onKeyDown={this.handleKeyPress}>
-        <header className="App-header">
+        {/* <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Maze Game</h1>
-        </header>
+        </header> */}
         {/* <p className="App-intro">
           To get started, edit <code>src/App.tsx</code> and save to reload.
         </p> */}
         <div>
-        <canvas ref={this.canvasRef} width={640} height={425} />
+        <canvas ref={this.canvasRef} width={this.WIDTH} height={this.HEIGHT} />
       </div>
       </div>
     );
@@ -73,8 +73,10 @@ private _ctx:any;
       this._ctx.fillStyle = "#00FF00";
     }else if(state === 'f'){
       this._ctx.fillStyle = "#FF0000";
-    }else{
+    }else if(state === 'e'){
       this._ctx.fillStyle = "#FFFFFF";
+    }else if(state === 'w'){
+      this._ctx.fillStyle = "#0000FF";
     }
     this._ctx.beginPath();
     this._ctx.rect(x,y,w,h);
@@ -95,14 +97,142 @@ private _ctx:any;
       }
     }
     this._tile[0][0].state = "s";
-    this._tile[this.tileColumnCount-1][this.tileRowCount-1] = "f";
+    // this._tile[this.tileColumnCount-1][this.tileRowCount-1] = "f";
   }
 
   public handleKeyPress(e:any){
     e.preventDefault();
-      // tslint:disable-next-line:no-console
-      console.log('This is enter!');
-  }
+    // down arrow key
+    if(e.nativeEvent.keyCode === 40){
+      for(let c=0; c<this.tileColumnCount; c++){
+        for(let r=0; r<this.tileRowCount; r++){
+            if(this._tile[c][r].state === "s"){
+              if(r<this.tileRowCount){
+              this._tile[c][r].state = "e";
+              let x = this._tile[c][r].x;
+              let y = this._tile[c][r].y;
+              this.clearSmallRect(x,y);
+              this.rect(x,y,this.tileW,this.tileH,"e");
+              r++;
+              if(r !== this.tileRowCount){
+              this._tile[c][r].state = "s";
+              x = this._tile[c][r].x;
+              y = this._tile[c][r].y;
+              this.clearSmallRect(x,y);
+              this.rect(x,y,this.tileW,this.tileH,"s");
+              }else{
+                r--;
+                this._tile[c][r].state = "s";
+                x = this._tile[c][r].x;
+                y = this._tile[c][r].y;
+                this.clearSmallRect(x,y);
+                this.rect(x,y,this.tileW,this.tileH,"s");
+              }
+              break;
+            }
+          }
+          }
+        }
+      }
+      // up arrow key
+      else if(e.nativeEvent.keyCode === 38){
+        for(let c=0; c<this.tileColumnCount; c++){
+          for(let r=0; r<this.tileRowCount; r++){
+              if(this._tile[c][r].state === "s"){
+                if(r>0){
+                  this._tile[c][r].state = "e";
+                let x = this._tile[c][r].x;
+                let y = this._tile[c][r].y;
+                this.clearSmallRect(x,y);
+                this.rect(x,y,this.tileW,this.tileH,"e");
+                r--;
+                if(r !== 0){
+                this._tile[c][r].state = "s";
+                x = this._tile[c][r].x;
+                y = this._tile[c][r].y;
+                this.clearSmallRect(x,y);
+                this.rect(x,y,this.tileW,this.tileH,"s");
+                }else{
+                  this._tile[c][r].state = "s";
+                  x = this._tile[c][r].x;
+                  y = this._tile[c][r].y;
+                  this.clearSmallRect(x,y);
+                  this.rect(x,y,this.tileW,this.tileH,"s");
+                }
+                break;
+                }
+              }
+            }
+          }
+        }
+        // right arrow key
+        else if(e.nativeEvent.keyCode === 39){
+          for(let c=0; c<this.tileColumnCount; c++){
+            for(let r=0; r<this.tileRowCount; r++){
+                if(this._tile[c][r].state === "s"){
+                  if(c<this.tileColumnCount){
+                  this._tile[c][r].state = "e";
+                  let x = this._tile[c][r].x;
+                  let y = this._tile[c][r].y;
+                  this.clearSmallRect(x,y);
+                  this.rect(x,y,this.tileW,this.tileH,"e");
+                  c++;
+                  if(c !== this.tileColumnCount){
+                  this._tile[c][r].state = "s";
+                  x = this._tile[c][r].x;
+                  y = this._tile[c][r].y;
+                  this.clearSmallRect(x,y);
+                  this.rect(x,y,this.tileW,this.tileH,"s");
+                  }else{
+                    c--;
+                    this._tile[c][r].state = "s";
+                    x = this._tile[c][r].x;
+                    y = this._tile[c][r].y;
+                    this.clearSmallRect(x,y);
+                    this.rect(x,y,this.tileW,this.tileH,"s");
+                  }
+                  break;
+                }
+              }
+              }
+            }
+          }
+          // left arrow key
+          else if(e.nativeEvent.keyCode === 37){
+            for(let c=0; c<this.tileColumnCount; c++){
+              for(let r=0; r<this.tileRowCount; r++){
+                  if(this._tile[c][r].state === "s"){
+                    if(c>0){
+                      this._tile[c][r].state = "e";
+                    let x = this._tile[c][r].x;
+                    let y = this._tile[c][r].y;
+                    this.clearSmallRect(x,y);
+                    this.rect(x,y,this.tileW,this.tileH,"e");
+                    c--;
+                    if(r !== 0){
+                    this._tile[c][r].state = "s";
+                    x = this._tile[c][r].x;
+                    y = this._tile[c][r].y;
+                    this.clearSmallRect(x,y);
+                    this.rect(x,y,this.tileW,this.tileH,"s");
+                    }else{
+                      this._tile[c][r].state = "s";
+                      x = this._tile[c][r].x;
+                      y = this._tile[c][r].y;
+                      this.clearSmallRect(x,y);
+                      this.rect(x,y,this.tileW,this.tileH,"s");
+                    }
+                    break;
+                    }
+                  }
+                }
+              }
+            }
+    }
+
+    public clearSmallRect(x:number,y:number){
+      this._ctx.clearRect(x,y,this.tileW,this.tileH);
+    }
 }
 
 export default App;
