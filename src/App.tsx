@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './App.css';
 
-import logo from './logo.svg';
+// import logo from './logo.svg';
 
 class App extends React.Component {
 
@@ -10,11 +10,14 @@ public canvasRef:any;
 public readonly WIDTH = 1366;
 public readonly HEIGHT = 637;
 
-public readonly tileW = 10;
-public readonly tileH = 10;
+public readonly tileW = 20;
+public readonly tileH = 20;
 
-public tileRowCount = 20;
-public tileColumnCount = 20;
+public tileRowCount:number;
+public tileColumnCount:number;
+
+public moves = 0;
+public enemies = 0;
 
 // tslint:disable-next-line:variable-name
 private _tile:any = [];
@@ -27,7 +30,13 @@ private _ctx:any;
   constructor(props:any){
     super(props);
     this.canvasRef = React.createRef();
-    this.handleKeyPress = this.handleKeyPress.bind(this)
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    let input:any = prompt("Please enter board height");
+    // tslint:disable-next-line:radix
+    this.tileRowCount = parseInt(input);
+    input = prompt("Please enter board width");
+    // tslint:disable-next-line:radix
+    this.tileColumnCount = parseInt(input);
   }
 
   public componentDidMount() {
@@ -94,6 +103,13 @@ private _ctx:any;
             // tslint:disable-next-line:object-literal-sort-keys
             state:"e"
           }
+          if(r!==0 && c!==0){
+            const num:number = Math.floor(Math.random()*100)+1;
+            if(num%13===0){
+              this._tile[c][r].state = "w";
+              this.enemies++;
+            }
+          }
       }
     }
     this._tile[0][0].state = "s";
@@ -115,6 +131,15 @@ private _ctx:any;
               this.rect(x,y,this.tileW,this.tileH,"e");
               r++;
               if(r !== this.tileRowCount){
+                this.moves++;
+                if(this._tile[c][r].state === "w"){
+                  this.enemies--;
+                  // tslint:disable-next-line:no-console
+                  console.log(`moves ${this.moves} enemies ${this.enemies}`);
+                  if(this.enemies === 1){
+                  alert(`Game Over: Total moves to save Princess: ${this.moves}`);
+                  }
+                }
               this._tile[c][r].state = "s";
               x = this._tile[c][r].x;
               y = this._tile[c][r].y;
@@ -147,11 +172,21 @@ private _ctx:any;
                 this.rect(x,y,this.tileW,this.tileH,"e");
                 r--;
                 if(r !== 0){
+                  this.moves++;
+              if(this._tile[c][r].state === "w"){
+                this.enemies--;
+                // tslint:disable-next-line:no-console
+                console.log(`moves ${this.moves} enemies ${this.enemies}`);
+                if(this.enemies === 0){
+                  alert(`Game Over: Total moves to save Princess: ${this.moves}`);
+                }
+              }
                 this._tile[c][r].state = "s";
                 x = this._tile[c][r].x;
                 y = this._tile[c][r].y;
                 this.clearSmallRect(x,y);
                 this.rect(x,y,this.tileW,this.tileH,"s");
+                this.moves++;
                 }else{
                   this._tile[c][r].state = "s";
                   x = this._tile[c][r].x;
@@ -178,6 +213,15 @@ private _ctx:any;
                   this.rect(x,y,this.tileW,this.tileH,"e");
                   c++;
                   if(c !== this.tileColumnCount){
+                    this.moves++;
+              if(this._tile[c][r].state === "w"){
+                this.enemies--;
+                // tslint:disable-next-line:no-console
+                console.log(`moves ${this.moves} enemies ${this.enemies}`);
+                if(this.enemies === 0){
+                  alert(`Game Over: Total moves to save Princess: ${this.moves}`);
+                }
+              }
                   this._tile[c][r].state = "s";
                   x = this._tile[c][r].x;
                   y = this._tile[c][r].y;
@@ -209,7 +253,16 @@ private _ctx:any;
                     this.clearSmallRect(x,y);
                     this.rect(x,y,this.tileW,this.tileH,"e");
                     c--;
-                    if(r !== 0){
+                    if(c !== 0){
+                      this.moves++;
+              if(this._tile[c][r].state === "w"){
+                this.enemies--;
+                // tslint:disable-next-line:no-console
+                console.log(`moves ${this.moves} enemies ${this.enemies}`);
+                if(this.enemies === 0){
+                  alert(`Game Over: Total moves to save Princess: ${this.moves}`);
+                }
+              }
                     this._tile[c][r].state = "s";
                     x = this._tile[c][r].x;
                     y = this._tile[c][r].y;
