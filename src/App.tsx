@@ -7,17 +7,20 @@ class App extends React.Component {
 
 public canvasRef:any;
 
-public readonly WIDTH = 1366;
-public readonly HEIGHT = 637;
+public readonly WIDTH = window.innerWidth;
+public readonly HEIGHT = window.innerHeight;
 
-public readonly tileW = 20;
-public readonly tileH = 20;
+public readonly tileW = 30;
+public readonly tileH = 30;
 
 public tileRowCount:number;
 public tileColumnCount:number;
 
 public moves = 0;
 public enemies = 0;
+
+public enemy = new Image();
+public hero = new Image();
 
 // tslint:disable-next-line:variable-name
 private _tile:any = [];
@@ -65,9 +68,9 @@ private _ctx:any;
 
   public draw(){
     this.clear();
-    this._ctx.fillStyle = "#FFFFFF";
     for(let c=0; c<this.tileColumnCount; c++){
       for(let r=0; r<this.tileRowCount; r++){
+        this.clearSmallRect(this._tile[c][r].x,this._tile[c][r].y);
         this.rect(this._tile[c][r].x, this._tile[c][r].y, this.tileW, this.tileH, this._tile[c][r].state);
       }
     }
@@ -79,18 +82,30 @@ private _ctx:any;
 
   public rect(x:number,y:number,w:number,h:number,state:string){
     if(state ==='s'){
-      this._ctx.fillStyle = "#00FF00";
+      this.hero = new Image();
+      this.hero.src = "images/mario.png";
+      this.hero.onload=()=>{
+        this._ctx.drawImage(this.hero,x,y,w,h);
+      };
     }else if(state === 'f'){
       this._ctx.fillStyle = "#FF0000";
+      this._ctx.beginPath();
+      this._ctx.rect(x,y,w,h);
+      this._ctx.closePath();
+      this._ctx.fill();
     }else if(state === 'e'){
       this._ctx.fillStyle = "#FFFFFF";
+      this._ctx.beginPath();
+      this._ctx.rect(x,y,w,h);
+      this._ctx.closePath();
+      this._ctx.fill();
     }else if(state === 'w'){
-      this._ctx.fillStyle = "#0000FF";
+      this.enemy = new Image();
+      this.enemy.src = "images/enemy.png";
+      this.enemy.onload=()=>{
+        this._ctx.drawImage(this.enemy,x,y,w,h);
+      };
     }
-    this._ctx.beginPath();
-    this._ctx.rect(x,y,w,h);
-    this._ctx.closePath();
-    this._ctx.fill();
   }
 
   public setTiles(){
@@ -134,9 +149,7 @@ private _ctx:any;
                 this.moves++;
                 if(this._tile[c][r].state === "w"){
                   this.enemies--;
-                  // tslint:disable-next-line:no-console
-                  console.log(`moves ${this.moves} enemies ${this.enemies}`);
-                  if(this.enemies === 1){
+                  if(this.enemies === 0){
                   alert(`Game Over: Total moves to save Princess: ${this.moves}`);
                   }
                 }
@@ -175,8 +188,6 @@ private _ctx:any;
                   this.moves++;
               if(this._tile[c][r].state === "w"){
                 this.enemies--;
-                // tslint:disable-next-line:no-console
-                console.log(`moves ${this.moves} enemies ${this.enemies}`);
                 if(this.enemies === 0){
                   alert(`Game Over: Total moves to save Princess: ${this.moves}`);
                 }
@@ -216,8 +227,6 @@ private _ctx:any;
                     this.moves++;
               if(this._tile[c][r].state === "w"){
                 this.enemies--;
-                // tslint:disable-next-line:no-console
-                console.log(`moves ${this.moves} enemies ${this.enemies}`);
                 if(this.enemies === 0){
                   alert(`Game Over: Total moves to save Princess: ${this.moves}`);
                 }
@@ -257,8 +266,6 @@ private _ctx:any;
                       this.moves++;
               if(this._tile[c][r].state === "w"){
                 this.enemies--;
-                // tslint:disable-next-line:no-console
-                console.log(`moves ${this.moves} enemies ${this.enemies}`);
                 if(this.enemies === 0){
                   alert(`Game Over: Total moves to save Princess: ${this.moves}`);
                 }
