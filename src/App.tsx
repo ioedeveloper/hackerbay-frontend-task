@@ -13,8 +13,8 @@ public readonly HEIGHT = window.innerHeight;
 public readonly tileW = 30;
 public readonly tileH = 30;
 
-public tileRowCount:number;
-public tileColumnCount:number;
+public tileRowCount:number = 0;
+public tileColumnCount:number = 0;
 
 public moves = 0;
 public enemies = 0;
