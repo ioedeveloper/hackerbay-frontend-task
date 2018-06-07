@@ -136,7 +136,7 @@ private _ctx:any;
                   this.enemies--;
                   // tslint:disable-next-line:no-console
                   console.log(`moves ${this.moves} enemies ${this.enemies}`);
-                  if(this.enemies === 1){
+                  if(this.enemies === 0){
                   alert(`Game Over: Total moves to save Princess: ${this.moves}`);
                   }
                 }
