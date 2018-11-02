@@ -26,7 +26,7 @@ public hero = new Image();
 private _tile:any = [];
 
 // tslint:disable-next-line:variable-name
-private _canvas:any;
+private _canvas:HTMLCanvasElement;
 // tslint:disable-next-line:variable-name
 private _ctx:any;
 
